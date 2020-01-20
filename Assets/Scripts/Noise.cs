@@ -52,7 +52,7 @@ public static class Noise
                     amplitude *= persistance;
                     frequency *= lacunarity;
                 }
-                // changing our Max and Min values 
+                // changing our Max and Min values if it is necessary
                 if (noiseHeight > maxNoiseHeight)
                     maxNoiseHeight = noiseHeight;
                 else if (noiseHeight < minNoiseHeight)
