@@ -9,7 +9,7 @@ public static class Noise
     public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset)
     {
         float[,] noiseMap = new float[mapWidth, mapHeight];
-        // Генератор с сидом
+        // Randomizer with seed
         System.Random prng = new System.Random(seed);
         Vector2[] octavesOffsets = new Vector2[octaves];
         
@@ -24,22 +24,22 @@ public static class Noise
         {
             scale = 0.00001f;
         }
-        // Максимальные значения параметров Ширины и Высоты карты
+        // Maximum and Minimum values of Height
         float maxNoiseHeight = float.MinValue;
         float minNoiseHeight = float.MaxValue;
-        // Ширина и высота, деленные на 2
+        // Width and Height divided by 2
         float halfWidth = mapWidth / 2f;
         float halfHeight = mapHeight / 2f;
-        // цикл по Y
+        // Y loop
         for (int y = 0; y < mapHeight; y++)
         {
-            // цикл по X
+            // X loop
             for (int x = 0; x < mapWidth; x++)
             {
                 float amplitude = 1;
                 float frequency = 1;
                 float noiseHeight = 0;
-                // цикл по октавам
+                // Octaves loop
                 for (int i = 0; i < octaves; i++)
                 {
                     float sampleX = (x - halfWidth) / scale * frequency + octavesOffsets[i].x;
@@ -47,11 +47,12 @@ public static class Noise
 
                     float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1;
                     noiseHeight += perlinValue * amplitude;
-                    // изменяем амлитуду и частоту в конце каждого прохода
+                    // changing amplitude and frequency in the end of each loop
+                    // frequency - частота
                     amplitude *= persistance;
                     frequency *= lacunarity;
                 }
-                // заменяем значения максимума и минимума, если выполняются условия
+                // changing our Max and Min values 
                 if (noiseHeight > maxNoiseHeight)
                     maxNoiseHeight = noiseHeight;
                 else if (noiseHeight < minNoiseHeight)
@@ -59,7 +60,7 @@ public static class Noise
                 noiseMap[x, y] = noiseHeight;
             }
         }
-        // заменяем значения noiseMap[,] на значения от 0 до 1
+        // changing noiseMap[,] values to value from 0 to 1
         for (int y = 0; y < mapHeight; y++)
         {
             for (int x = 0; x < mapWidth; x++)

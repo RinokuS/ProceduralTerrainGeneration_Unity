@@ -9,7 +9,7 @@ public class MapGeneratorEditor : Editor
     public override void OnInspectorGUI()
     {
         MapGenerator mapGen = (MapGenerator)target;
-        // Добавляем авто-генерацию, при изменении параметров карты
+        // Adding auto-generating with changing Map Parameters
         if (DrawDefaultInspector())
         {
             if (mapGen.autoUpdate)
@@ -17,7 +17,7 @@ public class MapGeneratorEditor : Editor
                 mapGen.GenerateMap();
             }
         }
-        // Добавляем кнопочку для генерации карты
+        // Adding Generate Button
         if (GUILayout.Button("Generate"))
         {
             mapGen.GenerateMap();
