@@ -23,6 +23,11 @@ public static  class FalloffGenerator
         return map;
     }
 
+    /// <summary>
+    /// Giving our own parameters to Evaluating, because we need some more black surface on Falloff map
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     static float Evaluate(float value)
     {
         float a = 3;
