@@ -6,7 +6,8 @@ public class UpdatableData : ScriptableObject
 {
     public event System.Action OnValuesUpdated;
     public bool autoUpdate;
-
+    
+    #if UNITY_EDITOR // preprocessor directive
     protected virtual void OnValidate()
     {
         if (autoUpdate)
@@ -19,9 +20,7 @@ public class UpdatableData : ScriptableObject
     {
         UnityEditor.EditorApplication.update -= NotifyOfUpdatedValues;
         
-        if (OnValuesUpdated != null)
-        {
-            OnValuesUpdated();
-        }
+        OnValuesUpdated?.Invoke();
     }
+    #endif
 }

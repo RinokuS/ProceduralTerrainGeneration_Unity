@@ -10,7 +10,7 @@ public class MapDisplay : MonoBehaviour
     /// <summary>
     /// Method for applying our texture to object
     /// </summary>
-    /// <param name="noiseMap"></param>
+    /// <param name="texture">texture for our map</param>
     public void DrawTexture(Texture2D texture)
     {
         textureRenderer.sharedMaterial.mainTexture = texture;
@@ -20,7 +20,6 @@ public class MapDisplay : MonoBehaviour
     /// Method for applying our mesh to object
     /// </summary>
     /// <param name="meshData"></param>
-    /// <param name="texture"></param>
     public void DrawMesh(MeshData meshData)
     {
         meshFilter.sharedMesh = meshData.CreateMesh();

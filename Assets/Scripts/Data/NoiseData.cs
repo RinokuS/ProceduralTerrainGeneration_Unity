@@ -18,6 +18,7 @@ public class NoiseData : UpdatableData
     public int seed;
     public Vector2 offset;
     
+    #if UNITY_EDITOR
     /// <summary>
     /// checking our bounds
     /// </summary>
@@ -30,4 +31,5 @@ public class NoiseData : UpdatableData
         
         base.OnValidate();
     }
+    #endif
 }
