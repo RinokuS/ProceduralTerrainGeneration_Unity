@@ -13,21 +13,40 @@ MonoBehaviour:
   m_Name: Default Texture
   m_EditorClassIdentifier: 
   autoUpdate: 1
-  baseColors:
-  - {r: 0.03137254, g: 0.32242212, b: 0.9254902, a: 0}
-  - {r: 0.09158063, g: 0.4404774, b: 0.9245283, a: 0}
-  - {r: 0.46226418, g: 0.46141908, b: 0.15917587, a: 0}
-  - {r: 0.32280037, g: 0.6320754, b: 0.10435206, a: 0}
-  - {r: 0.14200062, g: 0.4056604, b: 0.044010334, a: 0}
-  - {r: 0.3018868, g: 0.23398009, b: 0.14667143, a: 0}
-  - {r: 0.3301887, g: 0.29663134, b: 0.25698647, a: 0}
-  - {r: 0.6774653, g: 0.6981735, b: 0.8301887, a: 0}
-  baseStartHeights:
-  - 0
-  - 0.09
-  - 0.14
-  - 0.17
-  - 0.2
-  - 0.3
-  - 0.49
-  - 0.84
+  layers:
+  - texture: {fileID: 2800000, guid: 85b45b278389b44dd97e1702370f205e, type: 3}
+    tint: {r: 0, g: 0.63665855, b: 0.9433962, a: 0}
+    tintStrength: 0
+    startHeight: 0
+    blendStrength: 0
+    textureScale: 31.71
+  - texture: {fileID: 2800000, guid: 795bf9a3b4ca14caabf6ab66c31935e1, type: 3}
+    tint: {r: 0.745283, g: 0.7344749, b: 0.41131186, a: 0}
+    tintStrength: 0
+    startHeight: 0.08
+    blendStrength: 0.02
+    textureScale: 5.22
+  - texture: {fileID: 2800000, guid: e47aca05f445249e788b4c3f2cf135d3, type: 3}
+    tint: {r: 0.17494936, g: 0.49056602, b: 0.030081892, a: 0}
+    tintStrength: 0
+    startHeight: 0.13
+    blendStrength: 0.04
+    textureScale: 7.98
+  - texture: {fileID: 2800000, guid: 1188bbe92c56b48c4a034aa7b161f1cc, type: 3}
+    tint: {r: 0.49056602, g: 0.4143681, b: 0.057849757, a: 0}
+    tintStrength: 0
+    startHeight: 0.225
+    blendStrength: 0.107
+    textureScale: 11.38
+  - texture: {fileID: 2800000, guid: a9c515041bf0040eabe99d494b0b32a6, type: 3}
+    tint: {r: 0.2735849, g: 0.18062165, b: 0.086463146, a: 0}
+    tintStrength: 0
+    startHeight: 0.431
+    blendStrength: 0.313
+    textureScale: 15.99
+  - texture: {fileID: 2800000, guid: a2dfffd7104664f5a894d28ed948769e, type: 3}
+    tint: {r: 0.9433962, g: 0.90334636, b: 0.90334636, a: 0}
+    tintStrength: 0
+    startHeight: 0.843
+    blendStrength: 0.284
+    textureScale: 7.8

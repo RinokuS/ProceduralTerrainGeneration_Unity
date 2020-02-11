@@ -7,7 +7,8 @@ public static class HeightMapGenerator
     public static HeightMap GenerateHeightMap(int width, int height, HeightMapSettings settings, Vector2 sampleCentre) 
     {
         float[,] values = Noise.GenerateNoiseMap (width, height, settings.noiseSettings, sampleCentre);
-
+        float[,] falloffMap = FalloffGenerator.GenerateFalloffMap(width, height); // Generating falloffMap, too
+        
         AnimationCurve heightCurve_threadsafe = new AnimationCurve (settings.heightCurve.keys);
 
         float minValue = float.MaxValue;
@@ -17,6 +18,10 @@ public static class HeightMapGenerator
         {
             for (int j = 0; j < height; j++) 
             {
+                if (settings.useFalloff) // Clamping our NoiseMap Values with FalloffMap Values if useFalloff is selected
+                {
+                    values[i, j] = Mathf.Clamp01(values[i, j] - falloffMap[i, j]); // So we can made single island in water
+                }
                 values [i, j] *= heightCurve_threadsafe.Evaluate (values [i, j]) * settings.heightMultiplier;
 
                 if (values [i, j] > maxValue)
