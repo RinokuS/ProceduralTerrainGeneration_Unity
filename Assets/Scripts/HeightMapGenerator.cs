@@ -30,10 +30,45 @@ public static class HeightMapGenerator
                     minValue = values [i, j];
             }
         }
-
+        
         return new HeightMap (values, minValue, maxValue);
     }
+    
+    public static HeightMap GenerateHeatMap(int width, int height, HeightMapSettings heightSettings, Vector2 sampleCentre, HeatMapSettings heatSettings, out float[,] heatMap)
+    {
+        float[,] heightMap = Noise.GenerateNoiseMap (width, height, heightSettings.noiseSettings, sampleCentre);
+        float[,] uniformHeatMap = Noise.GenerateHeatNoiseMap(width, height, heatSettings.heatSettings, sampleCentre);
+        heatMap = new float[width,height];
 
+        for (int yIndex = 0; yIndex < height; yIndex++)
+        {
+            for (int xIndex = 0; xIndex < width; xIndex++)
+            {
+                heatMap[yIndex, xIndex] = uniformHeatMap[yIndex, xIndex] * heightMap[yIndex, xIndex];
+                heatMap[yIndex, xIndex] += heightMap[yIndex, xIndex] * heightMap[yIndex, xIndex];
+            }
+        }
+        AnimationCurve heightCurve_threadsafe = new AnimationCurve (heightSettings.heightCurve.keys);
+
+        float minValue = float.MaxValue;
+        float maxValue = float.MinValue;
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++) 
+            {
+                heatMap [i, j] *= heightCurve_threadsafe.Evaluate (heatMap [i, j]) * heightSettings.heightMultiplier;
+
+                if (heatMap [i, j] > maxValue)
+                    maxValue = heatMap [i, j];
+                if (heatMap [i, j] < minValue)
+                    minValue = heatMap [i, j];
+            }
+        }
+
+        heatMap = uniformHeatMap;
+        return new HeightMap(heatMap, minValue, maxValue);
+    }
 }
 
 public struct HeightMap 

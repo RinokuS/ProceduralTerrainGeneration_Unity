@@ -7,7 +7,7 @@ using System.Linq;
 public class TextureData : UpdatableData
 {
     private const int textureSize = 512;
-    private const TextureFormat textureFormat = TextureFormat.RGB565;
+    private const TextureFormat textureFormat = TextureFormat.RGB565; // 16 bit color texture format
     
     public Layer[] layers;
      
@@ -52,6 +52,14 @@ public class TextureData : UpdatableData
     [System.Serializable]
     public class Layer
     {
+        public enum TerrainType
+        {
+            Water,
+            Land,
+            Mountain
+        }
+
+        public TerrainType terrainType;
         public Texture2D texture;
         public Color tint;
         [Range(0,1)]

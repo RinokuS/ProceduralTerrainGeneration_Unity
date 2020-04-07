@@ -14,6 +14,8 @@ public class MapPreview : MonoBehaviour
     public enum DrawMode
     {
         NoiseMap,
+        HeatMap,
+        ColorHeatMap,
         Mesh,
         FalloffMap
     }
@@ -21,6 +23,7 @@ public class MapPreview : MonoBehaviour
 
     public MeshSettings meshSettings;
     public HeightMapSettings heightMapSettings;
+    public HeatMapSettings heatMapSettings;
     public TextureData textureData;
 
     public Material terrainMaterial;
@@ -29,6 +32,8 @@ public class MapPreview : MonoBehaviour
     public int editorPrevLOD;
 
     public bool autoUpdate;
+
+    private float[,] heatMap;
 
     /// <summary>
     /// Method for drawing our map with current mode
@@ -39,6 +44,10 @@ public class MapPreview : MonoBehaviour
         textureData.UpdateMeshHeights(terrainMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
         HeightMap heightMap = HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine, 
             meshSettings.numVertsPerLine, heightMapSettings, Vector2.zero);
+        HeightMap heatMap = HeightMapGenerator.GenerateHeatMap(meshSettings.numVertsPerLine,
+            meshSettings.numVertsPerLine, heightMapSettings, Vector2.zero, heatMapSettings, out this.heatMap);
+        Color[] colorHeatMap = Noise.GenerateColorHeatMap(meshSettings.numVertsPerLine,
+            meshSettings.numVertsPerLine, this.heatMap, heatMapSettings);
         
         if (drawMode == DrawMode.NoiseMap)
             DrawTexture(TextureGenerator.TextureFromHeightMap(heightMap));
@@ -46,6 +55,11 @@ public class MapPreview : MonoBehaviour
             DrawMesh(MeshGenerator.GenerateTerrainMesh(heightMap.values, meshSettings, editorPrevLOD));
         else if (drawMode == DrawMode.FalloffMap)
             DrawTexture(TextureGenerator.TextureFromHeightMap(new HeightMap(FalloffGenerator.GenerateFalloffMap(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine), 0, 1)));
+        else if (drawMode == DrawMode.HeatMap)
+            DrawTexture(TextureGenerator.TextureFromHeightMap(heatMap));
+        else if (drawMode == DrawMode.ColorHeatMap)
+            DrawTexture(TextureGenerator.TextureFromColorMap(colorHeatMap, meshSettings.numVertsPerLine,
+                meshSettings.numVertsPerLine));
     }
 
     /// <summary>
@@ -103,6 +117,12 @@ public class MapPreview : MonoBehaviour
         {
             textureData.OnValuesUpdated -= OnTextureValuesUpdated;
             textureData.OnValuesUpdated += OnTextureValuesUpdated;
+        }
+
+        if (heatMapSettings != null)
+        {
+            heatMapSettings.OnValuesUpdated -= OnValuesUpdated;
+            heatMapSettings.OnValuesUpdated += OnValuesUpdated;
         }
     }
 }
