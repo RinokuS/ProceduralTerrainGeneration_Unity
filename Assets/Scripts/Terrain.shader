@@ -24,6 +24,7 @@
         int layerCount;
         float3 baseColors[maxLayerCount];
         float baseStartHeights[maxLayerCount];
+        float baseStartHeats[maxLayerCount];
         float baseBlends[maxLayerCount];
         float baseColorStrength[maxLayerCount];
         float baseTextureScales[maxLayerCount];

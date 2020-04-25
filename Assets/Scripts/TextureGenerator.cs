@@ -46,4 +46,59 @@ public class TextureGenerator
         // Creating finally texture with TextureFromColorMap method
         return TextureFromColorMap(colorMap, width, height);
     }
+
+    public static Texture2D BiomeTexture(HeightMap heightMap, float[,] heatMap,
+        float[,] moistureMap, BiomesSettings settings)
+    {
+        int width = heightMap.values.GetLength(0);
+        int height = heightMap.values.GetLength(1);
+
+        Color[] colorMap = new Color[width * height];
+        for (int yIndex = 0; yIndex < height; yIndex++)
+        {
+            for (int xIndex = 0; xIndex < width; xIndex++)
+            {
+                int colorIndex = yIndex * width + xIndex;
+                float currentHeight = Mathf.InverseLerp(heightMap.minValue, heightMap.maxValue, heightMap.values[yIndex, xIndex]);
+                float currentHeat = Mathf.InverseLerp(0, 1, heatMap[yIndex, xIndex]);
+                float currentMoisture = Mathf.InverseLerp(0, 1, moistureMap[yIndex, xIndex]);
+                
+
+                int heightIndex = 0;
+                int heatIndex = 0;
+                int moistureIndex = 0;
+
+                for (int i = 0; i < settings.heightType.Length; i++)
+                {
+                    if (currentHeight <= settings.heightType[i].threshold)
+                    {
+                        heightIndex = settings.heightType[i].index;
+                        break; // Чтобы не проходил весь цикл
+                    }
+                }
+                
+                for (int i = 0; i < settings.heatType.Length; i++)
+                {
+                    if (currentHeat <= settings.heatType[i].threshold)
+                    {
+                        heatIndex = settings.heatType[i].index;
+                        break; // Чтобы не проходил весь цикл
+                    }
+                }
+                
+                for (int i = 0; i < settings.moistureType.Length; i++)
+                {
+                    if (currentMoisture <= settings.moistureType[i].threshold)
+                    {
+                        moistureIndex = settings.moistureType[i].index;
+                        break; // Чтобы не проходил весь цикл
+                    }
+                }
+
+                colorMap[colorIndex] = settings.biomes[heightIndex, heatIndex, moistureIndex].color;
+            }
+        }
+
+        return TextureFromColorMap(colorMap, width, height);
+    }
 }

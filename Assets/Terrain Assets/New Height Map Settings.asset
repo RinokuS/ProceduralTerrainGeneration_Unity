@@ -22,7 +22,7 @@ MonoBehaviour:
     seed: 154
     offset: {x: 0, y: 0}
   useFalloff: 0
-  heightMultiplier: 80
+  heightMultiplier: 8
   heightCurve:
     serializedVersion: 2
     m_Curve:

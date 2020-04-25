@@ -48,7 +48,7 @@ public static class HeightMapGenerator
                 heatMap[yIndex, xIndex] += heightMap[yIndex, xIndex] * heightMap[yIndex, xIndex];
             }
         }
-        AnimationCurve heightCurve_threadsafe = new AnimationCurve (heightSettings.heightCurve.keys);
+        AnimationCurve heightCurve_threadsafe = new AnimationCurve (heatSettings.heightCurve.keys);
 
         float minValue = float.MaxValue;
         float maxValue = float.MinValue;
@@ -68,6 +68,32 @@ public static class HeightMapGenerator
 
         heatMap = uniformHeatMap;
         return new HeightMap(heatMap, minValue, maxValue);
+    }
+
+    public static HeightMap GenerateMoistureMap(int width, int height, MoistureMapSettings settings, Vector2 sampleCentre, HeightMapSettings heightMapSettings)
+    {
+        float[,] values = Noise.GenerateMoistureNoiseMap(width, height, settings.moistureSettings, sampleCentre);
+        //float[,] values = Noise.GenerateNoiseMap(width, height, heightMapSettings.noiseSettings, sampleCentre);
+        
+        AnimationCurve heightCurve_threadsafe = new AnimationCurve (settings.heightCurve.keys);
+
+        float minValue = float.MaxValue;
+        float maxValue = float.MinValue;
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++) 
+            {
+                values [i, j] *= heightCurve_threadsafe.Evaluate (values [i, j]) * settings.heightMultiplier;
+
+                if (values [i, j] > maxValue)
+                    maxValue = values [i, j];
+                if (values [i, j] < minValue)
+                    minValue = values [i, j];
+            }
+        }
+        
+        return new HeightMap (values, minValue, maxValue);
     }
 }
 

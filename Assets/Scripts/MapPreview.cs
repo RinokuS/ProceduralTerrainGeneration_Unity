@@ -16,6 +16,8 @@ public class MapPreview : MonoBehaviour
         NoiseMap,
         HeatMap,
         ColorHeatMap,
+        ColorMoistureMap,
+        BiomeMap,
         Mesh,
         FalloffMap
     }
@@ -24,6 +26,8 @@ public class MapPreview : MonoBehaviour
     public MeshSettings meshSettings;
     public HeightMapSettings heightMapSettings;
     public HeatMapSettings heatMapSettings;
+    public MoistureMapSettings moistureMapSettings;
+    public BiomesSettings biomesSettings;
     public TextureData textureData;
 
     public Material terrainMaterial;
@@ -44,10 +48,14 @@ public class MapPreview : MonoBehaviour
         textureData.UpdateMeshHeights(terrainMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
         HeightMap heightMap = HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine, 
             meshSettings.numVertsPerLine, heightMapSettings, Vector2.zero);
-        HeightMap heatMap = HeightMapGenerator.GenerateHeatMap(meshSettings.numVertsPerLine,
+        HeightMap heatMap_ = HeightMapGenerator.GenerateHeatMap(meshSettings.numVertsPerLine,
             meshSettings.numVertsPerLine, heightMapSettings, Vector2.zero, heatMapSettings, out this.heatMap);
+        HeightMap moistureMap = HeightMapGenerator.GenerateMoistureMap(meshSettings.numVertsPerLine,
+            meshSettings.numVertsPerLine, moistureMapSettings, Vector2.zero, heightMapSettings);
         Color[] colorHeatMap = Noise.GenerateColorHeatMap(meshSettings.numVertsPerLine,
             meshSettings.numVertsPerLine, this.heatMap, heatMapSettings);
+        Color[] colorMoistureMap = Noise.GenerateColorMoistureMap(meshSettings.numVertsPerLine,
+            meshSettings.numVertsPerLine, moistureMap.values, moistureMapSettings);
         
         if (drawMode == DrawMode.NoiseMap)
             DrawTexture(TextureGenerator.TextureFromHeightMap(heightMap));
@@ -56,10 +64,15 @@ public class MapPreview : MonoBehaviour
         else if (drawMode == DrawMode.FalloffMap)
             DrawTexture(TextureGenerator.TextureFromHeightMap(new HeightMap(FalloffGenerator.GenerateFalloffMap(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine), 0, 1)));
         else if (drawMode == DrawMode.HeatMap)
-            DrawTexture(TextureGenerator.TextureFromHeightMap(heatMap));
+            DrawTexture(TextureGenerator.TextureFromHeightMap(heatMap_));
         else if (drawMode == DrawMode.ColorHeatMap)
             DrawTexture(TextureGenerator.TextureFromColorMap(colorHeatMap, meshSettings.numVertsPerLine,
                 meshSettings.numVertsPerLine));
+        else if (drawMode == DrawMode.ColorMoistureMap)
+            DrawTexture(TextureGenerator.TextureFromColorMap(colorMoistureMap, meshSettings.numVertsPerLine,
+                meshSettings.numVertsPerLine));
+        else if (drawMode == DrawMode.BiomeMap)
+            DrawTexture(TextureGenerator.BiomeTexture(heightMap,heatMap,moistureMap.values,biomesSettings));
     }
 
     /// <summary>
@@ -118,11 +131,22 @@ public class MapPreview : MonoBehaviour
             textureData.OnValuesUpdated -= OnTextureValuesUpdated;
             textureData.OnValuesUpdated += OnTextureValuesUpdated;
         }
-
         if (heatMapSettings != null)
         {
             heatMapSettings.OnValuesUpdated -= OnValuesUpdated;
             heatMapSettings.OnValuesUpdated += OnValuesUpdated;
+        }
+
+        if (moistureMapSettings != null)
+        {
+            moistureMapSettings.OnValuesUpdated -= OnValuesUpdated;
+            moistureMapSettings.OnValuesUpdated += OnValuesUpdated;
+        }
+
+        if (biomesSettings != null)
+        {
+            biomesSettings.OnValuesUpdated -= OnValuesUpdated;
+            biomesSettings.OnValuesUpdated += OnValuesUpdated;
         }
     }
 }

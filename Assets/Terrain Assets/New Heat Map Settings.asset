@@ -12,19 +12,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2471de2ce5b64540a2df7a48019113f, type: 3}
   m_Name: New Heat Map Settings
   m_EditorClassIdentifier: 
-  autoUpdate: 0
+  autoUpdate: 1
+  layers:
+  - tint: {r: 0.9622642, g: 0.022694906, b: 0.022694906, a: 0}
+    tintStrength: 0
+    startHeight: 0.28
+    blendStrength: 0
+    textureScale: 0
+  - tint: {r: 0.8396226, g: 0.6501102, b: 0.25743148, a: 0}
+    tintStrength: 0
+    startHeight: 0.52
+    blendStrength: 0
+    textureScale: 0
+  - tint: {r: 0.1788003, g: 0.43290126, b: 0.7735849, a: 0}
+    tintStrength: 0
+    startHeight: 1
+    blendStrength: 0
+    textureScale: 0
   heatSettings:
-    normalizeMode: 0
-    scale: 50
-    octaves: 6
-    persistance: 0.6
-    lacunarity: 2
-    seed: 0
+    normalizeMode: 1
+    scale: 200
+    octaves: 12
+    persistance: 0.5
+    lacunarity: 1.92
+    seed: 100500
     offset: {x: 0, y: 0}
-  heightMultiplier: 0
+  heightMultiplier: 20
   heightCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.41656613
+      value: 0.50930053
+      inSlope: 0.69082904
+      outSlope: 0.69082904
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.0009766
+      value: 0.86600494
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
