@@ -34,11 +34,11 @@ public static class HeightMapGenerator
         return new HeightMap (values, minValue, maxValue);
     }
     
-    public static HeightMap GenerateHeatMap(int width, int height, HeightMapSettings heightSettings, Vector2 sampleCentre, HeatMapSettings heatSettings, out float[,] heatMap)
+    public static HeightMap GenerateHeatMap(int width, int height, HeightMapSettings heightSettings, Vector2 sampleCentre, HeatMapSettings heatSettings)
     {
         float[,] heightMap = Noise.GenerateNoiseMap (width, height, heightSettings.noiseSettings, sampleCentre);
         float[,] uniformHeatMap = Noise.GenerateHeatNoiseMap(width, height, heatSettings.heatSettings, sampleCentre);
-        heatMap = new float[width,height];
+        float[,]heatMap = new float[width,height];
 
         for (int yIndex = 0; yIndex < height; yIndex++)
         {
@@ -70,7 +70,7 @@ public static class HeightMapGenerator
         return new HeightMap(heatMap, minValue, maxValue);
     }
 
-    public static HeightMap GenerateMoistureMap(int width, int height, MoistureMapSettings settings, Vector2 sampleCentre, HeightMapSettings heightMapSettings)
+    public static HeightMap GenerateMoistureMap(int width, int height, Vector2 sampleCentre, HeightMapSettings heightMapSettings, MoistureMapSettings settings)
     {
         float[,] values = Noise.GenerateMoistureNoiseMap(width, height, settings.moistureSettings, sampleCentre);
         //float[,] values = Noise.GenerateNoiseMap(width, height, heightMapSettings.noiseSettings, sampleCentre);

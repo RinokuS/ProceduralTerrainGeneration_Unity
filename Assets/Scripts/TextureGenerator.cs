@@ -58,8 +58,8 @@ public class TextureGenerator
         {
             for (int xIndex = 0; xIndex < width; xIndex++)
             {
-                int colorIndex = yIndex * width + xIndex;
-                float currentHeight = Mathf.InverseLerp(heightMap.minValue, heightMap.maxValue, heightMap.values[yIndex, xIndex]);
+                int colorIndex = xIndex * width + yIndex;
+                float currentHeight = Mathf.InverseLerp(heightMap.minValue, heightMap.maxValue, heightMap.values[(height-1)-yIndex, xIndex]);
                 float currentHeat = Mathf.InverseLerp(0, 1, heatMap[yIndex, xIndex]);
                 float currentMoisture = Mathf.InverseLerp(0, 1, moistureMap[yIndex, xIndex]);
                 

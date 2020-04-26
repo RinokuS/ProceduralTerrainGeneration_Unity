@@ -191,7 +191,7 @@ public static class Noise
         return noiseMap;
     }
 
-    public static Color[] GenerateColorHeatMap(int width, int height, float[,] heatMap, HeatMapSettings heatSettings)
+    public static Color[] GenerateColorHeatMap(int width, int height, HeightMap heatMap, HeatMapSettings heatSettings)
     {
         Color[] colorHeatMap = new Color[width * height];
         
@@ -200,7 +200,7 @@ public static class Noise
         {
             for (int j = 0; j < width; j++)
             {
-                float currentHeight = Mathf.InverseLerp(0, 1,heatMap[i, j]); // coloring
+                float currentHeight = Mathf.InverseLerp(0, 1,heatMap.values[i, j]); // coloring
                 
                 for (int k = 0; k < heatSettings.layers.Length; k++)
                 {
@@ -311,7 +311,6 @@ public static class Noise
     {
         Color[] colorMoistureMap = new Color[width * height];
         
-        
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
@@ -383,7 +382,7 @@ public class HeatSettings
     }
 }
 
-[Serializable]
+[System.Serializable]
 public class MoistureSettings
 {
     public Noise.NormalizeMode normalizeMode;
