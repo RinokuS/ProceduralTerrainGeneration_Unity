@@ -13,7 +13,10 @@ public class TextureData : UpdatableData
      
     private float savedMinHeight;
     private float savedMaxHeight;
-    
+
+    public float SavedMaxHeight => savedMaxHeight;
+    public float SavedMinHeight => savedMinHeight;
+
     public void ApplyToMaterial(Material material)
     {
         material.SetInt("layerCount", layers.Length);

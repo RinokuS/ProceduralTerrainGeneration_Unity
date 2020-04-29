@@ -47,8 +47,8 @@ public class TextureGenerator
         return TextureFromColorMap(colorMap, width, height);
     }
 
-    public static Texture2D BiomeTexture(HeightMap heightMap, float[,] heatMap,
-        float[,] moistureMap, BiomesSettings settings)
+    public static Texture2D BiomeTexture(HeightMap heightMap, HeightMap heatMap,
+        HeightMap moistureMap, BiomesSettings settings)
     {
         int width = heightMap.values.GetLength(0);
         int height = heightMap.values.GetLength(1);
@@ -59,9 +59,9 @@ public class TextureGenerator
             for (int xIndex = 0; xIndex < width; xIndex++)
             {
                 int colorIndex = xIndex * width + yIndex;
-                float currentHeight = Mathf.InverseLerp(heightMap.minValue, heightMap.maxValue, heightMap.values[(height-1)-yIndex, xIndex]);
-                float currentHeat = Mathf.InverseLerp(0, 1, heatMap[yIndex, xIndex]);
-                float currentMoisture = Mathf.InverseLerp(0, 1, moistureMap[yIndex, xIndex]);
+                float currentHeight = Mathf.InverseLerp(heightMap.minValue, heightMap.maxValue, heightMap.values[yIndex, xIndex]);
+                float currentHeat = Mathf.InverseLerp(0, 1, heatMap.values[yIndex, xIndex]);
+                float currentMoisture = Mathf.InverseLerp(moistureMap.minValue, moistureMap.maxValue, moistureMap.values[yIndex, xIndex]);
                 
 
                 int heightIndex = 0;

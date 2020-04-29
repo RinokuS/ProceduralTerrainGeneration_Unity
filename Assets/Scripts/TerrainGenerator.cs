@@ -14,15 +14,23 @@ public class TerrainGenerator : MonoBehaviour
 
     public MeshSettings meshSettings;
     public HeightMapSettings heightMapSettings;
+    public HeatMapSettings heatMapSettings;
+    public MoistureMapSettings moistureMapSettings;
+    public BiomesSettings biomesSettings;
     public TextureData textureSettings;
 
     public Transform viewer;
     public Material mapMaterial;
+    public Material texMaterial;
+    
+    public TreeGenerator treeGen;
 
     private Vector2 viewerPosition;
     private Vector2 viewerPositionOld;
     private float meshWorldSize;
     private int chunksVisibleInViewDst;
+
+    private TerrainChunk testChunk;
     
     Dictionary<Vector2, TerrainChunk> terrainChunkDict = new Dictionary<Vector2,TerrainChunk>();
     List<TerrainChunk> visibleTerrainChunks = new List<TerrainChunk>();
@@ -86,11 +94,12 @@ public class TerrainGenerator : MonoBehaviour
                         terrainChunkDict[viewedChunkCoord].UpdateTerrainChunk();
                     else
                     {
-                        TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings, meshSettings, 
-                            detailLevels, colliderLODIndex, transform, viewer, mapMaterial);
+                        TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings, heatMapSettings, moistureMapSettings, 
+                            biomesSettings, meshSettings, detailLevels, colliderLODIndex, transform, viewer, mapMaterial, treeGen, textureSettings);
                         terrainChunkDict.Add(viewedChunkCoord, newChunk);
                         newChunk.onVisibilityChanged += OnTerrainChunkVisibilityChanges;
                         newChunk.Load();
+                        testChunk = newChunk;
                     }
                 }
             }

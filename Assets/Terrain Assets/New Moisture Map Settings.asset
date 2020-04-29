@@ -32,9 +32,9 @@ MonoBehaviour:
   moistureSettings:
     normalizeMode: 1
     scale: 100
-    octaves: 6
-    persistance: 0.55
-    lacunarity: 2
+    octaves: 5
+    persistance: 0.31
+    lacunarity: 1.95
     seed: 26
     offset: {x: 0, y: 0}
   heightMultiplier: 20
@@ -51,10 +51,10 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.9980469
-      value: 0.74193573
-      inSlope: 2
-      outSlope: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0

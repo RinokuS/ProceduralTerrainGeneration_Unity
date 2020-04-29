@@ -4,7 +4,7 @@
     {
         testTexture("Texture", 2D) = "white"{}
         testScale("Scale", Float) = 1
-        
+        heatMap("Heat Map", 2D) = "white"{}
     }
     SubShader
     {
@@ -32,6 +32,7 @@
         float minHeight;
         float maxHeight;
         
+        sampler2D heatMap;
         sampler2D testTexture;
         float testScale;
         

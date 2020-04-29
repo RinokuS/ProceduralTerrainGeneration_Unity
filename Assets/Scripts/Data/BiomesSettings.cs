@@ -18,12 +18,16 @@ public class BiomesSettings : UpdatableData
         new Biome("snowy mount", Color.white), new Biome("salt sea", new Color(0.866f, 0.85f, 0.835f))
     };
     
-    public Biome[,,] biomes = {{{ourBiomes[2], ourBiomes[2], ourBiomes[9]},{ourBiomes[1], ourBiomes[1], ourBiomes[2]},
-            {ourBiomes[1], ourBiomes[0], ourBiomes[0]}},
-        {{ourBiomes[4], ourBiomes[3], ourBiomes[3]},{ourBiomes[6], ourBiomes[5], ourBiomes[4]},
+    public Biome[,,] biomes = {{{ourBiomes[1], ourBiomes[1], ourBiomes[1]},{ourBiomes[1], ourBiomes[1], ourBiomes[1]},
+            {ourBiomes[1], ourBiomes[1], ourBiomes[1]}},
+        {{ourBiomes[1],ourBiomes[1],ourBiomes[9]},{ourBiomes[1],ourBiomes[1],ourBiomes[1]},{ourBiomes[0],ourBiomes[0],ourBiomes[0]}},
+        {{ourBiomes[4],ourBiomes[3],ourBiomes[3]},{ourBiomes[6],ourBiomes[5],ourBiomes[4]},{ourBiomes[6],ourBiomes[6],ourBiomes[6]}},
+        {{ourBiomes[3], ourBiomes[3], ourBiomes[3]},{ourBiomes[6], ourBiomes[5], ourBiomes[3]},
             {ourBiomes[6], ourBiomes[6], ourBiomes[6]}},
         {{ourBiomes[7], ourBiomes[7], ourBiomes[7]},{ourBiomes[7], ourBiomes[7], ourBiomes[7]},
-            {ourBiomes[8],ourBiomes[8],ourBiomes[8]}}};
+            {ourBiomes[7],ourBiomes[7],ourBiomes[7]}},
+        {{ourBiomes[7],ourBiomes[7],ourBiomes[7]},{ourBiomes[8],ourBiomes[8],ourBiomes[8]},{ourBiomes[8],ourBiomes[8],ourBiomes[8]}}
+    };
 }
 [Serializable]
 public class Biome

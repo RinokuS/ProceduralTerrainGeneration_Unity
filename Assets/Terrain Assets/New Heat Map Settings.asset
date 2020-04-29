@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2471de2ce5b64540a2df7a48019113f, type: 3}
   m_Name: New Heat Map Settings
   m_EditorClassIdentifier: 
-  autoUpdate: 1
+  autoUpdate: 0
   layers:
   - tint: {r: 0.9622642, g: 0.022694906, b: 0.022694906, a: 0}
     tintStrength: 0
@@ -31,10 +31,10 @@ MonoBehaviour:
     textureScale: 0
   heatSettings:
     normalizeMode: 1
-    scale: 200
-    octaves: 12
-    persistance: 0.5
-    lacunarity: 1.92
+    scale: 150
+    octaves: 5
+    persistance: 0.31
+    lacunarity: 1.8
     seed: 100500
     offset: {x: 0, y: 0}
   heightMultiplier: 20
@@ -51,19 +51,10 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.41656613
-      value: 0.50930053
-      inSlope: 0.69082904
-      outSlope: 0.69082904
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1.0009766
-      value: 0.86600494
-      inSlope: 2
-      outSlope: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0

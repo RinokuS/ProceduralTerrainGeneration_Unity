@@ -9,38 +9,54 @@ public class TerrainChunk
         public Vector2 coord;
         
         private GameObject meshObject;
-        private Vector2 sampleCentre;
-        private Bounds bounds;
+        public Vector2 sampleCentre;
+        public Bounds bounds;
 
         private HeightMap heightMap;
+        private HeightMap heatMap;
+        private HeightMap moistureMap;
 
         private MeshRenderer meshRenderer;
-        private MeshFilter meshFilter;
-        private MeshCollider meshCollider;
+        public MeshFilter meshFilter;
+        public MeshCollider meshCollider;
 
         private LODInfo[] detailLevels;
         private LODMesh[] lodMeshes;
         private int colliderLODIndex;
 
         private HeightMap _mapd;
-        private bool heightMapRecieved;
+        public bool heightMapRecieved;
+        public bool heatMapRecieved;
+        public bool moistureMapRecieved;
+        
         private int previousLODIndex = -1;
         private bool hasSetCollider;
         private float maxViewDst;
+        private bool hasSetTrees;
 
         private HeightMapSettings heightMapSettings;
+        private HeatMapSettings heatMapSettings;
+        private MoistureMapSettings moistureMapSettings;
+        private BiomesSettings biomesSettings;
         private MeshSettings meshSettings;
         private Transform viewer;
-        
-        public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, 
-            LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material material)
+        private TreeGenerator treeGenerator;
+        private TextureData textureData;
+
+        public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, HeatMapSettings heatMapSettings, MoistureMapSettings moistureMapSettings,
+            BiomesSettings biomesSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material material, TreeGenerator treeGen, TextureData textureData)
         {
             this.coord = coord;
             this.detailLevels = detailLevels;
             this.colliderLODIndex = colliderLODIndex;
             this.heightMapSettings = heightMapSettings;
+            this.heatMapSettings = heatMapSettings;
+            this.moistureMapSettings = moistureMapSettings;
+            this.biomesSettings = biomesSettings;
             this.meshSettings = meshSettings;
             this.viewer = viewer;
+            treeGenerator = treeGen;
+            this.textureData = textureData;
 
             sampleCentre = coord * meshSettings.meshWorldSize / meshSettings.meshScale;
             Vector2 position = coord * meshSettings.meshWorldSize;
@@ -69,7 +85,6 @@ public class TerrainChunk
             }
 
             maxViewDst = detailLevels[detailLevels.Length - 1].visibleDistThreshold;
-            
         }
         /// <summary>
         /// Method which helps us to avoid situation when the height map gets received and we update the terrain chunk
@@ -84,16 +99,41 @@ public class TerrainChunk
              */
             ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine,
                 meshSettings.numVertsPerLine, heightMapSettings, sampleCentre), OnHeightMapReceived); // Check
+            ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateHeatMap(meshSettings.numVertsPerLine,
+                meshSettings.numVertsPerLine, heightMapSettings, sampleCentre, heatMapSettings), OnHeatMapReceived);
+            ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateMoistureMap(meshSettings.numVertsPerLine,
+                meshSettings.numVertsPerLine, sampleCentre, heightMapSettings, moistureMapSettings), OnMoistureMapReceived);
         }
         
         void OnHeightMapReceived(object heightMapObject)
         {
-            this.heightMap = (HeightMap)heightMapObject;
+            this.heightMap = (HeightMap) heightMapObject;
             heightMapRecieved = true;
 
             UpdateTerrainChunk();
         }
+
+        void OnHeatMapReceived(object heatMapObject)
+        {
+            this.heatMap = (HeightMap) heatMapObject;
+            heatMapRecieved = true;
+            
+            UpdateTerrainChunk();
+        }
         
+        void OnMoistureMapReceived(object moistureMapObject)
+        {
+            this.moistureMap = (HeightMap) moistureMapObject;
+            moistureMapRecieved = true;
+            
+            UpdateTerrainChunk();
+        }
+
+        public void UpdTexture()
+        {
+            meshRenderer.material.mainTexture =
+                TextureGenerator.BiomeTexture(heightMap, heatMap, moistureMap, biomesSettings);
+        }
         Vector2 viewerPosition => new Vector2(viewer.position.x,viewer.position.z);
         
         /// <summary>
@@ -104,7 +144,7 @@ public class TerrainChunk
         /// </summary>
         public void UpdateTerrainChunk()
         {
-            if (heightMapRecieved)
+            if (heightMapRecieved && heatMapRecieved && moistureMapRecieved)
             {
                 float viewerDstFromNearestEdge = Mathf.Sqrt(bounds.SqrDistance(viewerPosition));
 
@@ -171,6 +211,8 @@ public class TerrainChunk
                     {
                         meshCollider.sharedMesh = lodMeshes[colliderLODIndex].mesh;
                         hasSetCollider = true;
+                        if (!hasSetTrees)
+                            treeGenerator.GenerateTrees(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, 3,this, textureData);
                     }
                 }
             }
