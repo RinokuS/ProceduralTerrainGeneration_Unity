@@ -11,27 +11,31 @@ public class TerrainGenerator : MonoBehaviour
 
     public int colliderLODIndex;
     public LODInfo[] detailLevels;
+    [Range(0, MeshSettings.numSupportedLODs - 1)]
+    public int treeLOD;
 
     public MeshSettings meshSettings;
     public HeightMapSettings heightMapSettings;
     public HeatMapSettings heatMapSettings;
     public MoistureMapSettings moistureMapSettings;
-    public BiomesSettings biomesSettings;
     public TextureData textureSettings;
 
     public Transform viewer;
     public Material mapMaterial;
-    public Material texMaterial;
-    
+
     public TreeGenerator treeGen;
+    public GrassGenerator grassGen;
 
     private Vector2 viewerPosition;
     private Vector2 viewerPositionOld;
     private float meshWorldSize;
     private int chunksVisibleInViewDst;
 
-    private TerrainChunk testChunk;
-    
+    public static float minHeat = 0.5f;
+    public static float maxHeat = 1;
+    public static float minMoisture = 0.5f;
+    public static float maxMoisture = 1;
+
     Dictionary<Vector2, TerrainChunk> terrainChunkDict = new Dictionary<Vector2,TerrainChunk>();
     List<TerrainChunk> visibleTerrainChunks = new List<TerrainChunk>();
 
@@ -95,11 +99,10 @@ public class TerrainGenerator : MonoBehaviour
                     else
                     {
                         TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings, heatMapSettings, moistureMapSettings, 
-                            biomesSettings, meshSettings, detailLevels, colliderLODIndex, transform, viewer, mapMaterial, treeGen, textureSettings);
+                            meshSettings, detailLevels, colliderLODIndex, transform, viewer, mapMaterial, treeGen, grassGen, textureSettings, treeLOD);
                         terrainChunkDict.Add(viewedChunkCoord, newChunk);
                         newChunk.onVisibilityChanged += OnTerrainChunkVisibilityChanges;
                         newChunk.Load();
-                        testChunk = newChunk;
                     }
                 }
             }
