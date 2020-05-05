@@ -71,21 +71,7 @@ public class MapPreview : MonoBehaviour
         else if (drawMode == DrawMode.BiomeMap)
             DrawTexture(TextureGenerator.BiomeTexture(heightMap,heatMap,moistureMap,biomesSettings));
     }
-
-    public void Make1DArr(HeightMap hMap, out float[] newArr)
-    {
-        newArr = new float[hMap.values.GetLength(0) * hMap.values.GetLength(1)];
-        
-        for (int i = 0; i < hMap.values.GetLength(0); i++)
-        {
-            for (int j = 0; j < hMap.values.GetLength(1); j++)
-            {
-                int index1D = i * hMap.values.GetLength(0) + j;
-
-                newArr[index1D] = Mathf.InverseLerp(hMap.minValue,hMap.maxValue,hMap.values[i,j]);
-            }
-        }
-    }
+    
     /// <summary>
     /// Method for applying our texture to object
     /// </summary>

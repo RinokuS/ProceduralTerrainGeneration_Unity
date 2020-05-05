@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class TerrainChunk
@@ -8,7 +7,7 @@ public class TerrainChunk
     public event System.Action<TerrainChunk, bool> onVisibilityChanged;
     public Vector2 coord;
 
-    private GameObject meshObject;
+    public GameObject meshObject;
     public Vector2 sampleCentre;
     public Bounds bounds;
 

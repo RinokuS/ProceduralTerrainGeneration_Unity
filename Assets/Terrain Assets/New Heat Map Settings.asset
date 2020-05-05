@@ -31,13 +31,13 @@ MonoBehaviour:
     textureScale: 0
   heatSettings:
     normalizeMode: 1
-    scale: 150
+    scale: 250
     octaves: 5
-    persistance: 0.31
-    lacunarity: 1.8
+    persistance: 0.51
+    lacunarity: 1.5
     seed: 100500
     offset: {x: 0, y: 0}
-  heightMultiplier: 20
+  heightMultiplier: 100
   heightCurve:
     serializedVersion: 2
     m_Curve:

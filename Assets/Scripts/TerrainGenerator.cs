@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.PlayerLoop;
 
 public class TerrainGenerator : MonoBehaviour
 {
@@ -25,6 +23,9 @@ public class TerrainGenerator : MonoBehaviour
 
     public TreeGenerator treeGen;
     public GrassGenerator grassGen;
+    public GameObject water;
+    [Range(0,30)]
+    public float waterHeight;
 
     private Vector2 viewerPosition;
     private Vector2 viewerPositionOld;
@@ -103,6 +104,13 @@ public class TerrainGenerator : MonoBehaviour
                         terrainChunkDict.Add(viewedChunkCoord, newChunk);
                         newChunk.onVisibilityChanged += OnTerrainChunkVisibilityChanges;
                         newChunk.Load();
+                        if (!(water is null))
+                        {
+                            GameObject waterObj = Instantiate(water, new Vector3(newChunk.bounds.center.x, 0, newChunk.bounds.center.y), Quaternion.identity);
+                            waterObj.transform.parent = newChunk.meshObject.transform;
+                            waterObj.transform.position += new Vector3(0, waterHeight, 0);
+                            waterObj.transform.localScale = new Vector3(3,1,3) * meshSettings.meshScale;
+                        }
                     }
                 }
             }

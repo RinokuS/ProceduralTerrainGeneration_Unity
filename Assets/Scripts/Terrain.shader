@@ -4,7 +4,6 @@
     {
         testTexture("Texture", 2D) = "white"{}
         testScale("Scale", Float) = 1
-        heatMap("Heat Map", 2D) = "white"{}
     }
     SubShader
     {
@@ -24,7 +23,6 @@
         int layerCount;
         float3 baseColors[maxLayerCount];
         float baseStartHeights[maxLayerCount];
-        float baseStartHeats[maxLayerCount];
         float baseBlends[maxLayerCount];
         float baseColorStrength[maxLayerCount];
         float baseTextureScales[maxLayerCount];
@@ -32,7 +30,6 @@
         float minHeight;
         float maxHeight;
         
-        sampler2D heatMap;
         sampler2D testTexture;
         float testScale;
         

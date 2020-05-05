@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b8f5626ad04f431dac0e681eb93707a, type: 3}
   m_Name: New Moisture Map Settings
   m_EditorClassIdentifier: 
-  autoUpdate: 1
+  autoUpdate: 0
   layers:
   - tint: {r: 0.08877714, g: 0.48320004, b: 0.8962264, a: 0}
     tintStrength: 0
@@ -31,10 +31,10 @@ MonoBehaviour:
     textureScale: 0
   moistureSettings:
     normalizeMode: 1
-    scale: 100
+    scale: 250
     octaves: 5
-    persistance: 0.31
-    lacunarity: 1.95
+    persistance: 0.51
+    lacunarity: 1.5
     seed: 26
     offset: {x: 0, y: 0}
   heightMultiplier: 20

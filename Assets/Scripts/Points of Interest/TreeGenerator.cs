@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
 public class TreeGenerator : MonoBehaviour
 {
+    private static Random rnd = new Random();
     [SerializeField]
     private HeightMapSettings treeGenSettings;
     [SerializeField]
-    private GameObject treePrefab;
+    private GameObject[] treePrefabs;
     [SerializeField, Range(0,2)]
     private float treeScale;
     [SerializeField, Range(0, 10)] 
@@ -63,7 +63,15 @@ public class TreeGenerator : MonoBehaviour
                     {
                         Vector3 treePos = new Vector3(meshVertices[vertexIndex].x, meshVertices[vertexIndex].y, meshVertices[vertexIndex].z) + 
                                           new Vector3(chunk.bounds.center.x,0, chunk.bounds.center.y);
-                        chunk.chunkTreesDict.Add(treePos, new Tree(treePos, Instantiate(treePrefab, treePos, Quaternion.identity), treeScale, parent));
+                        if (treePrefabs.Length != 0)
+                        {
+                            GameObject treePrefab = treePrefabs[rnd.Next(treePrefabs.Length)];
+                            if (!(treePrefab is null))
+                            {
+                                chunk.chunkTreesDict.Add(treePos, new Tree(treePos, Instantiate(treePrefab, treePos, Quaternion.identity), treeScale, parent));
+                            }
+                        }
+                        
                     }
                 }
                 catch (IndexOutOfRangeException)
