@@ -1,7 +1,7 @@
 Procedural Terrain Generator (PTG)
 =======
 
-![screensho](https://imgur.com/a/JZvb7uR)
+![screensho](https://i.imgur.com/jBKkeqL.jpg)
 
 *PTG* is a Unity Asset for landscape procedural generation. It uses Perlin noise maps with custom settings to generate mesh, biomes and to proceduraly place trees.
 
