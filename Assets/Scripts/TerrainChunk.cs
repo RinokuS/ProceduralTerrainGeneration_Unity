@@ -29,7 +29,6 @@ public class TerrainChunk
     private bool moistureMapRecieved;
 
     private int previousLODIndex = -1;
-    private bool hasSetMesh;
     private bool hasSetCollider;
     private float maxViewDst;
     private bool hasSetTrees;
@@ -189,7 +188,6 @@ public class TerrainChunk
                     {
                         previousLODIndex = lodIndex;
                         meshFilter.mesh = lodMesh.mesh;
-                        hasSetMesh = true;
                     }
                     else if (!lodMesh.hasRequestedMesh)
                     {

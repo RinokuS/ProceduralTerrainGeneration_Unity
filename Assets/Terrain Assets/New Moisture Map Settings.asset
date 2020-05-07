@@ -21,7 +21,7 @@ MonoBehaviour:
     textureScale: 0
   - tint: {r: 0.7777361, g: 0.8584906, b: 0.10933607, a: 0}
     tintStrength: 0
-    startHeight: 0.97
+    startHeight: 0.9
     blendStrength: 0
     textureScale: 0
   - tint: {r: 0.8207547, g: 0.16647384, b: 0.16647384, a: 0}
@@ -33,9 +33,9 @@ MonoBehaviour:
     normalizeMode: 1
     scale: 250
     octaves: 5
-    persistance: 0.51
+    persistance: 0.66
     lacunarity: 1.5
-    seed: 26
+    seed: 0
     offset: {x: 0, y: 0}
   heightMultiplier: 20
   heightCurve:

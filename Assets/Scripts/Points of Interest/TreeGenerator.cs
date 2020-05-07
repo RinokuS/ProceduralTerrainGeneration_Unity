@@ -9,6 +9,8 @@ public class TreeGenerator : MonoBehaviour
     private HeightMapSettings treeGenSettings;
     [SerializeField]
     private GameObject[] treePrefabs;
+    [SerializeField]
+    private GameObject[] winterTreePrefabs;
     [SerializeField, Range(0,2)]
     private float treeScale;
     [SerializeField, Range(0, 10)] 
@@ -57,21 +59,36 @@ public class TreeGenerator : MonoBehaviour
                     float corrMoisture = Mathf.InverseLerp(TerrainGenerator.minMoisture, TerrainGenerator.maxMoisture,
                         chunk.moistureMap.values[i, j]);
                     if (treeValue.CompareTo(maxValue) == 0 && corrHeight <= (textureData.layers[3].startHeight - Epsilone) && 
-                        corrHeight >= (textureData.layers[2].startHeight + Epsilone) &&
-                        corrHeat <= 1 && corrHeat >= 0.55f &&
-                        corrMoisture <= 0.7f && corrMoisture >= 0.08f)  // Add epsilone to minimize borders of biome
+                        corrHeight >= (textureData.layers[2].startHeight + Epsilone))  // Add epsilone to minimize borders of biome
                     {
-                        Vector3 treePos = new Vector3(meshVertices[vertexIndex].x, meshVertices[vertexIndex].y, meshVertices[vertexIndex].z) + 
-                                          new Vector3(chunk.bounds.center.x,0, chunk.bounds.center.y);
-                        if (treePrefabs.Length != 0)
+                        if (corrHeat <= 0.76f && corrHeat >= 0.44f &&
+                            corrMoisture <= 0.5f && corrMoisture >= 0f)
                         {
-                            GameObject treePrefab = treePrefabs[rnd.Next(treePrefabs.Length)];
-                            if (!(treePrefab is null))
+                            Vector3 treePos = new Vector3(meshVertices[vertexIndex].x, meshVertices[vertexIndex].y, meshVertices[vertexIndex].z) + 
+                                              new Vector3(chunk.bounds.center.x,0, chunk.bounds.center.y);
+                            if (treePrefabs.Length != 0)
                             {
-                                chunk.chunkTreesDict.Add(treePos, new Tree(treePos, Instantiate(treePrefab, treePos, Quaternion.identity), treeScale, parent));
+                                GameObject treePrefab = treePrefabs[rnd.Next(treePrefabs.Length)];
+                                if (!(treePrefab is null))
+                                {
+                                    chunk.chunkTreesDict.Add(treePos, new Tree(treePos, Instantiate(treePrefab, treePos, Quaternion.identity), treeScale, parent));
+                                }
                             }
                         }
-                        
+                        else if (corrHeat <= 1f && corrHeat > 0.76f &&
+                                 corrMoisture <= 0.5f && corrMoisture >= 0f)
+                        {
+                            Vector3 treePos = new Vector3(meshVertices[vertexIndex].x, meshVertices[vertexIndex].y, meshVertices[vertexIndex].z) + 
+                                              new Vector3(chunk.bounds.center.x,0, chunk.bounds.center.y);
+                            if (winterTreePrefabs.Length != 0)
+                            {
+                                GameObject treePrefab = winterTreePrefabs[rnd.Next(winterTreePrefabs.Length)];
+                                if (!(treePrefab is null))
+                                {
+                                    chunk.chunkTreesDict.Add(treePos, new Tree(treePos, Instantiate(treePrefab, treePos, Quaternion.identity), treeScale, parent));
+                                }
+                            }
+                        }
                     }
                 }
                 catch (IndexOutOfRangeException)
