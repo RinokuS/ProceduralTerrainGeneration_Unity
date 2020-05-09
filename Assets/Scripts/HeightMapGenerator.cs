@@ -70,7 +70,7 @@ public static class HeightMapGenerator
         return new HeightMap(heatMap, minValue, maxValue);
     }
 
-    public static HeightMap GenerateMoistureMap(int width, int height, Vector2 sampleCentre, HeightMapSettings heightMapSettings, MoistureMapSettings settings)
+    public static HeightMap GenerateMoistureMap(int width, int height, Vector2 sampleCentre, MoistureMapSettings settings)
     {
         float[,] values = Noise.GenerateMoistureNoiseMap(width, height, settings.moistureSettings, sampleCentre);
         //float[,] values = Noise.GenerateNoiseMap(width, height, heightMapSettings.noiseSettings, sampleCentre);

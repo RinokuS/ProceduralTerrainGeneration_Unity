@@ -102,7 +102,7 @@ public class TerrainGenerator : MonoBehaviour
                         TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings, heatMapSettings, moistureMapSettings, 
                             meshSettings, detailLevels, colliderLODIndex, transform, viewer, mapMaterial, treeGen, grassGen, textureSettings, treeLOD);
                         terrainChunkDict.Add(viewedChunkCoord, newChunk);
-                        newChunk.onVisibilityChanged += OnTerrainChunkVisibilityChanges;
+                        newChunk.OnVisibilityChanged += OnTerrainChunkVisibilityChanges;
                         newChunk.Load();
                         if (!(water is null))
                         {

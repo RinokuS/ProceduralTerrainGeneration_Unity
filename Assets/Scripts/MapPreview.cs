@@ -6,8 +6,7 @@ public class MapPreview : MonoBehaviour
 {
     public Renderer textureRenderer;
     public MeshFilter meshFilter;
-    public MeshRenderer meshRenderer;
-    
+
     /// <summary>
     /// Mods for drawing map
     /// </summary>
@@ -50,7 +49,7 @@ public class MapPreview : MonoBehaviour
         HeightMap heatMap = HeightMapGenerator.GenerateHeatMap(meshSettings.numVertsPerLine,
             meshSettings.numVertsPerLine, heightMapSettings, Vector2.zero, heatMapSettings);
         HeightMap moistureMap = HeightMapGenerator.GenerateMoistureMap(meshSettings.numVertsPerLine,
-            meshSettings.numVertsPerLine, Vector2.zero, heightMapSettings, this.moistureMapSettings);
+            meshSettings.numVertsPerLine, Vector2.zero, this.moistureMapSettings);
 
         if (drawMode == DrawMode.NoiseMap)
             DrawTexture(TextureGenerator.TextureFromHeightMap(heightMap));
@@ -76,7 +75,7 @@ public class MapPreview : MonoBehaviour
     /// Method for applying our texture to object
     /// </summary>
     /// <param name="texture">texture for our map</param>
-    public void DrawTexture(Texture2D texture)
+    void DrawTexture(Texture2D texture)
     {
         textureRenderer.sharedMaterial.mainTexture = texture;
         textureRenderer.transform.localScale = new Vector3(texture.width,1,texture.height) / 10f;
@@ -89,7 +88,7 @@ public class MapPreview : MonoBehaviour
     /// Method for applying our mesh to object
     /// </summary>
     /// <param name="meshData"></param>
-    public void DrawMesh(MeshData meshData)
+    void DrawMesh(MeshData meshData)
     {
         meshFilter.sharedMesh = meshData.CreateMesh();
         

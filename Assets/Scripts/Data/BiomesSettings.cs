@@ -44,9 +44,7 @@ public class Biome
 [Serializable]
 public class TerrainType
 {
-    public string name;
     [Range(0,1)]
     public float threshold;
-    public Color color;
     public int index;
 }

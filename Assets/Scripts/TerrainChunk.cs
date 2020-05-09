@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class TerrainChunk
 {
-    private const float colliderGenerationDistanceThreshold = 5;
-    public event System.Action<TerrainChunk, bool> onVisibilityChanged;
+    private const float ColliderGenerationDistanceThreshold = 5;
+    public event System.Action<TerrainChunk, bool> OnVisibilityChanged;
     public Vector2 coord;
 
     public GameObject meshObject;
@@ -22,8 +22,7 @@ public class TerrainChunk
     private LODInfo[] detailLevels;
     private LODMesh[] lodMeshes;
     private int colliderLODIndex;
-
-    private HeightMap _mapd;
+    
     private bool heightMapRecieved;
     private bool heatMapRecieved;
     private bool moistureMapRecieved;
@@ -85,10 +84,10 @@ public class TerrainChunk
         for (int i = 0; i < detailLevels.Length; i++)
         {
             lodMeshes[i] = new LODMesh(detailLevels[i].lod);
-            lodMeshes[i].updateCallback += UpdateTerrainChunk;
+            lodMeshes[i].UpdateCallback += UpdateTerrainChunk;
             if (i == colliderLODIndex)
             {
-                lodMeshes[i].updateCallback += UpdateCollisionMesh;
+                lodMeshes[i].UpdateCallback += UpdateCollisionMesh;
             }
         }
 
@@ -111,7 +110,7 @@ public class TerrainChunk
         ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateHeatMap(meshSettings.numVertsPerLine,
             meshSettings.numVertsPerLine, heightMapSettings, sampleCentre, heatMapSettings), OnHeatMapReceived);
         ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateMoistureMap(meshSettings.numVertsPerLine,
-            meshSettings.numVertsPerLine, sampleCentre, heightMapSettings, moistureMapSettings), OnMoistureMapReceived);
+            meshSettings.numVertsPerLine, sampleCentre, moistureMapSettings), OnMoistureMapReceived);
     }
 
     void OnHeightMapReceived(object heightMapObject)
@@ -234,7 +233,7 @@ public class TerrainChunk
             if (wasVisible != visible)
             {
                 SetVisible(visible);
-                onVisibilityChanged?.Invoke(this, visible);
+                OnVisibilityChanged?.Invoke(this, visible);
             }
         }
     }
@@ -254,7 +253,7 @@ public class TerrainChunk
                     lodMeshes[colliderLODIndex].RequestMesh(heightMap, meshSettings);
             }
 
-            if (sqrDstFromViewerToEdge < colliderGenerationDistanceThreshold * colliderGenerationDistanceThreshold)
+            if (sqrDstFromViewerToEdge < ColliderGenerationDistanceThreshold * ColliderGenerationDistanceThreshold)
             {
                 if (lodMeshes[colliderLODIndex].hasMesh)
                 {
@@ -271,12 +270,12 @@ public class TerrainChunk
         }
     }
 
-    public void SetVisible(bool visible)
+    void SetVisible(bool visible)
     {
         meshObject.SetActive(visible);
     }
 
-    public bool IsVisible()
+    bool IsVisible()
     {
         return meshObject.activeSelf;
     }
@@ -291,7 +290,7 @@ class LODMesh
     public bool hasRequestedMesh;
     public bool hasMesh;
     private int lod;
-    public event System.Action updateCallback;
+    public event System.Action UpdateCallback;
 
     public LODMesh(int lod)
     {
@@ -303,7 +302,7 @@ class LODMesh
         mesh = ((MeshData) meshDataObject).CreateMesh();
         hasMesh = true;
         
-        updateCallback();
+        UpdateCallback();
     }
 
     public void RequestMesh(HeightMap heightMap, MeshSettings meshSettings)
