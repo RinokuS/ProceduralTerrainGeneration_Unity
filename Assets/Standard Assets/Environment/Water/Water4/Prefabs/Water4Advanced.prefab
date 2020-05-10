@@ -328,7 +328,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sharedMaterial: {fileID: 2100000, guid: a5f2339f242f6cc41a982ec55ea3c201, type: 2}
-  waterQuality: 2
+  waterQuality: 0
   edgeBlend: 1
 --- !u!114 &11400002
 MonoBehaviour:

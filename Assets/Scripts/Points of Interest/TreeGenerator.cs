@@ -11,7 +11,7 @@ public class TreeGenerator : MonoBehaviour
     private GameObject[] treePrefabs;
     [SerializeField]
     private GameObject[] winterTreePrefabs;
-    [SerializeField, Range(0,2)]
+    [SerializeField, Range(0,20)]
     private float treeScale;
     [SerializeField, Range(0, 10)] 
     private int neighborRadius;
