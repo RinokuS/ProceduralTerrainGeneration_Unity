@@ -623,7 +623,7 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   cloudProjectId: 1938b6c6-ec74-45b6-b15e-9e8abdb51e0d
   framebufferDepthMemorylessMode: 0
-  projectName: MapGenerator
+  projectName: Procedural Terrain Generation
   organizationId: rinokusk
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
