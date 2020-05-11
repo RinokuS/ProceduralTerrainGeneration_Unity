@@ -1,14 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
 {
     private const float viewerMoveThresholdForChunkUpdate = 25f;
+
     private const float sqrViewerMoveThresholdForChunkUpdate =
         viewerMoveThresholdForChunkUpdate * viewerMoveThresholdForChunkUpdate;
 
     public int colliderLODIndex;
     public LODInfo[] detailLevels;
+
     [Range(0, MeshSettings.numSupportedLODs - 1)]
     public int treeLOD;
 
@@ -24,8 +27,7 @@ public class TerrainGenerator : MonoBehaviour
     public TreeGenerator treeGen;
     public GrassGenerator grassGen;
     public GameObject water;
-    [Range(0,30)]
-    public float waterHeight;
+    [Range(0, 30)] public float waterHeight;
 
     private Vector2 viewerPosition;
     private Vector2 viewerPositionOld;
@@ -37,24 +39,41 @@ public class TerrainGenerator : MonoBehaviour
     public static float minMoisture = 0.5f;
     public static float maxMoisture = 1;
 
-    Dictionary<Vector2, TerrainChunk> terrainChunkDict = new Dictionary<Vector2,TerrainChunk>();
+    Dictionary<Vector2, TerrainChunk> terrainChunkDict = new Dictionary<Vector2, TerrainChunk>();
     List<TerrainChunk> visibleTerrainChunks = new List<TerrainChunk>();
 
     void Start()
     {
         textureSettings.ApplyToMaterial(mapMaterial);
         textureSettings.UpdateMeshHeights(mapMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
+
+        try
+        {
+            viewerPosition = new Vector2(viewer.position.x, viewer.position.z); 
+        }
+        catch (UnassignedReferenceException e)
+        {
+            Debug.Log("Please add viewer prefab into Map Generator");
+            return;
+        }
         
         float maxViewDst = detailLevels[detailLevels.Length - 1].visibleDistThreshold;
         meshWorldSize = meshSettings.meshWorldSize;
         chunksVisibleInViewDst = Mathf.RoundToInt(maxViewDst / meshWorldSize);
-        
+
         UpdateVisibleChunks();
     }
 
     void Update()
     {
-        viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
+        try
+        {
+            viewerPosition = new Vector2(viewer.position.x, viewer.position.z); 
+        }
+        catch (UnassignedReferenceException e)
+        {
+            return;
+        }
 
         if (viewerPosition != viewerPositionOld)
         {
@@ -77,7 +96,7 @@ public class TerrainGenerator : MonoBehaviour
     void UpdateVisibleChunks()
     {
         HashSet<Vector2> alreadyUpdatedChunkCoords = new HashSet<Vector2>();
-        
+
         for (int i = visibleTerrainChunks.Count - 1; i >= 0; i--)
         {
             alreadyUpdatedChunkCoords.Add(visibleTerrainChunks[i].coord);
@@ -93,23 +112,28 @@ public class TerrainGenerator : MonoBehaviour
             {
                 Vector2 viewedChunkCoord = new Vector2(currentChunkCoordX + xOffset, currentChunkCoordY + yOffset);
 
-                if (!alreadyUpdatedChunkCoords.Contains(viewedChunkCoord)) // only if we have not already updated this coord, we will bother running code below
+                if (!alreadyUpdatedChunkCoords.Contains(viewedChunkCoord)
+                ) // only if we have not already updated this coord, we will bother running code below
                 {
                     if (terrainChunkDict.ContainsKey(viewedChunkCoord))
                         terrainChunkDict[viewedChunkCoord].UpdateTerrainChunk();
                     else
                     {
-                        TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings, heatMapSettings, moistureMapSettings, 
-                            meshSettings, detailLevels, colliderLODIndex, transform, viewer, mapMaterial, treeGen, grassGen, textureSettings, treeLOD);
+                        TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings, heatMapSettings,
+                            moistureMapSettings,
+                            meshSettings, detailLevels, colliderLODIndex, transform, viewer, mapMaterial, treeGen,
+                            grassGen, textureSettings, treeLOD);
                         terrainChunkDict.Add(viewedChunkCoord, newChunk);
                         newChunk.OnVisibilityChanged += OnTerrainChunkVisibilityChanges;
                         newChunk.Load();
                         if (!(water is null))
                         {
-                            GameObject waterObj = Instantiate(water, new Vector3(newChunk.bounds.center.x, 0, newChunk.bounds.center.y), Quaternion.identity);
+                            GameObject waterObj = Instantiate(water,
+                                new Vector3(newChunk.bounds.center.x, 0, newChunk.bounds.center.y),
+                                Quaternion.identity);
                             waterObj.transform.parent = newChunk.meshObject.transform;
                             waterObj.transform.position += new Vector3(0, waterHeight, 0);
-                            waterObj.transform.localScale = new Vector3(3,1,3) * meshSettings.meshScale;
+                            waterObj.transform.localScale = new Vector3(3, 1, 3) * meshSettings.meshScale;
                         }
                     }
                 }
@@ -131,6 +155,7 @@ public struct LODInfo
 {
     [Range(0, MeshSettings.numSupportedLODs - 1)]
     public int lod;
+
     public float visibleDistThreshold;
 
     public float sqrVisibleDstThreshold
