@@ -44,24 +44,35 @@ public class TerrainGenerator : MonoBehaviour
 
     void Start()
     {
-        textureSettings.ApplyToMaterial(mapMaterial);
-        textureSettings.UpdateMeshHeights(mapMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
-
         try
         {
-            viewerPosition = new Vector2(viewer.position.x, viewer.position.z); 
-        }
-        catch (UnassignedReferenceException e)
-        {
-            Debug.Log("Please add viewer prefab into Map Generator");
-            return;
-        }
-        
-        float maxViewDst = detailLevels[detailLevels.Length - 1].visibleDistThreshold;
-        meshWorldSize = meshSettings.meshWorldSize;
-        chunksVisibleInViewDst = Mathf.RoundToInt(maxViewDst / meshWorldSize);
+            textureSettings.ApplyToMaterial(mapMaterial);
+            textureSettings.UpdateMeshHeights(mapMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
 
-        UpdateVisibleChunks();
+            try
+            {
+                viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
+            }
+            catch (UnassignedReferenceException)
+            {
+                Debug.Log("Please add viewer prefab into Map Generator.");
+                return;
+            }
+
+            float maxViewDst = detailLevels[detailLevels.Length - 1].visibleDistThreshold;
+            meshWorldSize = meshSettings.meshWorldSize;
+            chunksVisibleInViewDst = Mathf.RoundToInt(maxViewDst / meshWorldSize);
+
+            UpdateVisibleChunks();
+        }
+        catch (NullReferenceException)
+        {
+            Debug.Log("You have to insert all missing elements into your Map Generator.");
+        }
+        catch (UnassignedReferenceException)
+        {
+            Debug.Log("Please add mapMaterial prefab into Map Generator.");
+        }
     }
 
     void Update()
@@ -119,22 +130,28 @@ public class TerrainGenerator : MonoBehaviour
                         terrainChunkDict[viewedChunkCoord].UpdateTerrainChunk();
                     else
                     {
-                        TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings, heatMapSettings,
-                            moistureMapSettings,
-                            meshSettings, detailLevels, colliderLODIndex, transform, viewer, mapMaterial, treeGen,
-                            grassGen, textureSettings, treeLOD);
-                        terrainChunkDict.Add(viewedChunkCoord, newChunk);
-                        newChunk.OnVisibilityChanged += OnTerrainChunkVisibilityChanges;
-                        newChunk.Load();
-                        if (!(water is null))
+                        if (!(heatMapSettings is null) && !(moistureMapSettings is null))
                         {
-                            GameObject waterObj = Instantiate(water,
-                                new Vector3(newChunk.bounds.center.x, 0, newChunk.bounds.center.y),
-                                Quaternion.identity);
-                            waterObj.transform.parent = newChunk.meshObject.transform;
-                            waterObj.transform.position += new Vector3(0, waterHeight, 0);
-                            waterObj.transform.localScale = new Vector3(3, 1, 3) * meshSettings.meshScale;
+                            TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings,
+                                heatMapSettings,
+                                moistureMapSettings,
+                                meshSettings, detailLevels, colliderLODIndex, transform, viewer, mapMaterial, treeGen,
+                                grassGen, textureSettings, treeLOD);
+                            terrainChunkDict.Add(viewedChunkCoord, newChunk);
+                            newChunk.OnVisibilityChanged += OnTerrainChunkVisibilityChanges;
+                            newChunk.Load();
+                            if (!(water is null))
+                            {
+                                GameObject waterObj = Instantiate(water,
+                                    new Vector3(newChunk.bounds.center.x, 0, newChunk.bounds.center.y),
+                                    Quaternion.identity);
+                                waterObj.transform.parent = newChunk.meshObject.transform;
+                                waterObj.transform.position += new Vector3(0, waterHeight, 0);
+                                waterObj.transform.localScale = new Vector3(3, 1, 3) * meshSettings.meshScale;
+                            }
                         }
+                        else
+                            Debug.Log("You have to insert all missing elements into your Map Generator.");
                     }
                 }
             }

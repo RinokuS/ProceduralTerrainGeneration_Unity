@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class MapPreview : MonoBehaviour
@@ -41,34 +40,50 @@ public class MapPreview : MonoBehaviour
     /// </summary>
     public void DrawMapInEditor()
     {
-        textureData.ApplyToMaterial(terrainMaterial);
-        textureData.UpdateMeshHeights(terrainMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
-        
-        HeightMap heightMap = HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine, 
-            meshSettings.numVertsPerLine, heightMapSettings, Vector2.zero);
-        HeightMap heatMap = HeightMapGenerator.GenerateHeatMap(meshSettings.numVertsPerLine,
-            meshSettings.numVertsPerLine, heightMapSettings, Vector2.zero, heatMapSettings);
-        HeightMap moistureMap = HeightMapGenerator.GenerateMoistureMap(meshSettings.numVertsPerLine,
-            meshSettings.numVertsPerLine, Vector2.zero, this.moistureMapSettings);
+        try
+        {
+            textureData.ApplyToMaterial(terrainMaterial);
+            textureData.UpdateMeshHeights(terrainMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
 
-        if (drawMode == DrawMode.NoiseMap)
-            DrawTexture(TextureGenerator.TextureFromHeightMap(heightMap));
-        else if (drawMode == DrawMode.Mesh)
-            DrawMesh(MeshGenerator.GenerateTerrainMesh(heightMap.values, meshSettings, editorPrevLOD));
-        else if (drawMode == DrawMode.FalloffMap)
-            DrawTexture(TextureGenerator.TextureFromHeightMap(new HeightMap(FalloffGenerator.GenerateFalloffMap(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine), 0, 1)));
-        else if (drawMode == DrawMode.HeatMap)
-            DrawTexture(TextureGenerator.TextureFromHeightMap(heatMap));
-        else if (drawMode == DrawMode.ColorHeatMap)
-            DrawTexture(TextureGenerator.TextureFromColorMap(Noise.GenerateColorHeatMap(meshSettings.numVertsPerLine,
-                    meshSettings.numVertsPerLine, heatMap, heatMapSettings), meshSettings.numVertsPerLine,
-                meshSettings.numVertsPerLine));
-        else if (drawMode == DrawMode.ColorMoistureMap)
-            DrawTexture(TextureGenerator.TextureFromColorMap(Noise.GenerateColorMoistureMap(meshSettings.numVertsPerLine,
-                    meshSettings.numVertsPerLine, moistureMap.values, moistureMapSettings), meshSettings.numVertsPerLine,
-                meshSettings.numVertsPerLine));
-        else if (drawMode == DrawMode.BiomeMap)
-            DrawTexture(TextureGenerator.BiomeTexture(heightMap,heatMap,moistureMap,biomesSettings));
+            HeightMap heightMap = HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine,
+                meshSettings.numVertsPerLine, heightMapSettings, Vector2.zero);
+            HeightMap heatMap = HeightMapGenerator.GenerateHeatMap(meshSettings.numVertsPerLine,
+                meshSettings.numVertsPerLine, heightMapSettings, Vector2.zero, heatMapSettings);
+            HeightMap moistureMap = HeightMapGenerator.GenerateMoistureMap(meshSettings.numVertsPerLine,
+                meshSettings.numVertsPerLine, Vector2.zero, this.moistureMapSettings);
+
+            if (drawMode == DrawMode.NoiseMap)
+                DrawTexture(TextureGenerator.TextureFromHeightMap(heightMap));
+            else if (drawMode == DrawMode.Mesh)
+                DrawMesh(MeshGenerator.GenerateTerrainMesh(heightMap.values, meshSettings, editorPrevLOD));
+            else if (drawMode == DrawMode.FalloffMap)
+                DrawTexture(TextureGenerator.TextureFromHeightMap(new HeightMap(
+                    FalloffGenerator.GenerateFalloffMap(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine), 0,
+                    1)));
+            else if (drawMode == DrawMode.HeatMap)
+                DrawTexture(TextureGenerator.TextureFromHeightMap(heatMap));
+            else if (drawMode == DrawMode.ColorHeatMap)
+                DrawTexture(TextureGenerator.TextureFromColorMap(Noise.GenerateColorHeatMap(
+                        meshSettings.numVertsPerLine,
+                        meshSettings.numVertsPerLine, heatMap, heatMapSettings), meshSettings.numVertsPerLine,
+                    meshSettings.numVertsPerLine));
+            else if (drawMode == DrawMode.ColorMoistureMap)
+                DrawTexture(TextureGenerator.TextureFromColorMap(Noise.GenerateColorMoistureMap(
+                        meshSettings.numVertsPerLine,
+                        meshSettings.numVertsPerLine, moistureMap.values, moistureMapSettings),
+                    meshSettings.numVertsPerLine,
+                    meshSettings.numVertsPerLine));
+            else if (drawMode == DrawMode.BiomeMap)
+                DrawTexture(TextureGenerator.BiomeTexture(heightMap, heatMap, moistureMap, biomesSettings));
+        }
+        catch (NullReferenceException)
+        {
+            Debug.Log("You have to insert all settings into your Map Preview object.");
+        }
+        catch (UnassignedReferenceException)
+        {
+            Debug.Log("You have to insert materials into your Map Preview object.");
+        }
     }
     
     /// <summary>

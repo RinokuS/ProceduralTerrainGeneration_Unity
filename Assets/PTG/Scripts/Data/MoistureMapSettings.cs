@@ -6,7 +6,7 @@ using UnityEngine;
 public class MoistureMapSettings : UpdatableData
 {
     public MoistureRate[] layers;
-    public MoistureSettings moistureSettings;
+    public NoiseSettings moistureSettings;
 
     public float heightMultiplier;
     public AnimationCurve heightCurve;

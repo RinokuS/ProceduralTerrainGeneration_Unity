@@ -98,7 +98,7 @@ public static class Noise
         return noiseMap;
     }
 
-    public static float[,] GenerateHeatNoiseMap(int mapWidth, int mapHeight, HeatSettings settings,
+    public static float[,] GenerateHeatNoiseMap(int mapWidth, int mapHeight, NoiseSettings settings,
         Vector2 sampleCentre)
     {
         float[,] noiseMap = new float[mapWidth, mapHeight];
@@ -213,7 +213,7 @@ public static class Noise
         return colorHeatMap;
     }
 
-    public static float[,] GenerateMoistureNoiseMap(int mapWidth, int mapHeight, MoistureSettings settings,
+    public static float[,] GenerateMoistureNoiseMap(int mapWidth, int mapHeight, NoiseSettings settings,
         Vector2 sampleCentre)
     {
         float[,] noiseMap = new float[mapWidth, mapHeight];
@@ -331,56 +331,6 @@ public static class Noise
 
 [System.Serializable]
 public class NoiseSettings
-{
-    public Noise.NormalizeMode normalizeMode;
-    
-    public float scale = 50;
-
-    public int octaves = 6;
-    // ползунок от 0 до 1
-    [Range(0,1)]
-    public float persistance = 0.6f;
-    public float lacunarity = 2;
-
-    public int seed;
-    public Vector2 offset;
-
-    public void ValidateValues()
-    {
-        scale = Mathf.Max(scale, 0.01f);
-        octaves = Mathf.Max(octaves, 1);
-        lacunarity = Mathf.Max(lacunarity, 1);
-        persistance = Mathf.Clamp01(persistance);
-    }
-}
-
-[System.Serializable]
-public class HeatSettings
-{
-    public Noise.NormalizeMode normalizeMode;
-    
-    public float scale = 50;
-
-    public int octaves = 6;
-    // ползунок от 0 до 1
-    [Range(0,1)]
-    public float persistance = 0.6f;
-    public float lacunarity = 2;
-
-    public int seed;
-    public Vector2 offset;
-
-    public void ValidateValues()
-    {
-        scale = Mathf.Max(scale, 0.01f);
-        octaves = Mathf.Max(octaves, 1);
-        lacunarity = Mathf.Max(lacunarity, 1);
-        persistance = Mathf.Clamp01(persistance);
-    }
-}
-
-[System.Serializable]
-public class MoistureSettings
 {
     public Noise.NormalizeMode normalizeMode;
     

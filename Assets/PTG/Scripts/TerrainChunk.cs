@@ -193,7 +193,7 @@ public class TerrainChunk
                         lodMesh.RequestMesh(heightMap, meshSettings);
                     }
                     
-                    if (chunkTreesDict.Count == 0 && lodIndex <= treeLOD)
+                    if (chunkTreesDict.Count == 0 && lodIndex <= treeLOD && !(treeGenerator is null))
                     {
                         treeGenerator.GenerateTrees(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, this,
                             textureData, meshFilter.mesh, meshObject.transform);
@@ -260,7 +260,9 @@ public class TerrainChunk
                     meshCollider.sharedMesh = lodMeshes[colliderLODIndex].mesh;
                     hasSetCollider = true;
 
-                    grassGenerator.GenerateGrass(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, this, textureData, meshCollider.sharedMesh, meshObject.transform);
+                    if(!(grassGenerator is null))
+                        grassGenerator.GenerateGrass(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, 
+                            this, textureData, meshCollider.sharedMesh, meshObject.transform);
                     foreach (var item in chunkTreesDict)
                     {
                         item.Value.SetVisible(true);

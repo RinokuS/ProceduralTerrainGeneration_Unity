@@ -4,7 +4,7 @@
 public class HeatMapSettings : UpdatableData
 {
     public HeatRate[] layers;
-    public HeatSettings heatSettings;
+    public NoiseSettings heatSettings;
     
     public AnimationCurve heightCurve;
 
