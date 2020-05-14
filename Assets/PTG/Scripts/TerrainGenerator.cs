@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
 {
-    private const float viewerMoveThresholdForChunkUpdate = 25f;
+    private const float viewerMoveThresholdForChunkUpdate = 50f;
 
     private const float sqrViewerMoveThresholdForChunkUpdate =
         viewerMoveThresholdForChunkUpdate * viewerMoveThresholdForChunkUpdate;

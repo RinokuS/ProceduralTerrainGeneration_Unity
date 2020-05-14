@@ -46,30 +46,43 @@ public class GrassGenerator : MonoBehaviour
                         corrHeight >= (textureData.layers[2].startHeight + Epsilone) && 
                         (Mathf.Lerp(grassMap.minValue, grassMap.maxValue, grassMap.values[i,j]) <= grassFrequency))
                     {
-                        if (corrHeat < 0.7f && corrHeat >= 0.2f &&
-                            corrMoisture <= 0.7f && corrMoisture >= 0)
+                        try
                         {
-                            Vector3 grassPos = new Vector3(meshVertices[vertexIndex].x, meshVertices[vertexIndex].y, meshVertices[vertexIndex].z) + 
-                                               new Vector3(chunk.bounds.center.x,0, chunk.bounds.center.y);
-                            if (!(grassPrefab is null))
-                                chunk.chunkGrassDict.Add(grassPos, new Grass(Instantiate(grassPrefab, grassPos, Quaternion.identity), grassScale, parent));
+                            if (corrHeat < 0.7f && corrHeat >= 0.2f &&
+                                corrMoisture <= 0.7f && corrMoisture >= 0)
+                            {
+                                Vector3 grassPos = new Vector3(meshVertices[vertexIndex].x, meshVertices[vertexIndex].y,
+                                                       meshVertices[vertexIndex].z) +
+                                                   new Vector3(chunk.bounds.center.x, 0, chunk.bounds.center.y);
+                                if (!(grassPrefab is null))
+                                    chunk.chunkGrassDict.Add(grassPos,
+                                        new Grass(Instantiate(grassPrefab, grassPos, Quaternion.identity), grassScale,
+                                            parent));
+                            }
+                            else if (corrHeat <= 1f && corrHeat >= 0.7f &&
+                                     corrMoisture <= 0.7f && corrMoisture >= 0)
+                            {
+                                Vector3 grassPos = new Vector3(meshVertices[vertexIndex].x, meshVertices[vertexIndex].y,
+                                                       meshVertices[vertexIndex].z) +
+                                                   new Vector3(chunk.bounds.center.x, 0, chunk.bounds.center.y);
+                                if (!(winterGrassPrefab is null))
+                                    chunk.chunkGrassDict.Add(grassPos,
+                                        new Grass(Instantiate(winterGrassPrefab, grassPos, Quaternion.identity),
+                                            grassScale, parent));
+                            }
+                            else if (corrHeat < 0.61f && corrHeat >= 0.16f &&
+                                     corrMoisture <= 0.95f && corrMoisture > 0.7f)
+                            {
+                                Vector3 grassPos = new Vector3(meshVertices[vertexIndex].x, meshVertices[vertexIndex].y,
+                                                       meshVertices[vertexIndex].z) +
+                                                   new Vector3(chunk.bounds.center.x, 0, chunk.bounds.center.y);
+                                if (!(savannaGrassPrefab is null))
+                                    chunk.chunkGrassDict.Add(grassPos,
+                                        new Grass(Instantiate(savannaGrassPrefab, grassPos, Quaternion.identity),
+                                            grassScale, parent));
+                            }
                         }
-                        else if (corrHeat <= 1f && corrHeat >= 0.7f &&
-                                 corrMoisture <= 0.7f && corrMoisture >= 0)
-                        {
-                            Vector3 grassPos = new Vector3(meshVertices[vertexIndex].x, meshVertices[vertexIndex].y, meshVertices[vertexIndex].z) + 
-                                               new Vector3(chunk.bounds.center.x,0, chunk.bounds.center.y);
-                            if (!(winterGrassPrefab is null))
-                                chunk.chunkGrassDict.Add(grassPos, new Grass(Instantiate(winterGrassPrefab, grassPos, Quaternion.identity), grassScale, parent));
-                        }
-                        else if (corrHeat < 0.61f && corrHeat >= 0.16f &&
-                                 corrMoisture <= 0.95f && corrMoisture > 0.7f)
-                        {
-                            Vector3 grassPos = new Vector3(meshVertices[vertexIndex].x, meshVertices[vertexIndex].y, meshVertices[vertexIndex].z) + 
-                                               new Vector3(chunk.bounds.center.x,0, chunk.bounds.center.y);
-                            if (!(savannaGrassPrefab is null))
-                                chunk.chunkGrassDict.Add(grassPos, new Grass(Instantiate(savannaGrassPrefab, grassPos, Quaternion.identity), grassScale, parent));
-                        }
+                        catch(ArgumentException){}
                     }
                 }
                 catch (IndexOutOfRangeException)

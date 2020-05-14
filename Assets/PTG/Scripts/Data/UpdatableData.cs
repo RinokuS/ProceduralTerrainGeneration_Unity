@@ -7,6 +7,7 @@ public class UpdatableData : ScriptableObject
     public event System.Action OnValuesUpdated;
     public bool autoUpdate;
     
+    // compile this code only if in Unity Editor
     #if UNITY_EDITOR // preprocessor directive
     protected virtual void OnValidate()
     {
